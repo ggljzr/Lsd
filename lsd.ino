@@ -1,33 +1,35 @@
 #include <inttypes.h>
 #include "Print.h"
 
-class LSD{
+class LSD : public Print{
   public:
     LSD();
     void render();
+    virtual size_t write(uint8_t);
 
   private:
     static const uint8_t _cols = 16;
 
-    uint8_t _upper_row[_cols];
-    uint8_t _lower_row[_cols];
+    uint8_t _cursor_c = 0;
+
+    uint8_t _char_buffer[_cols];
 };
 
 LSD::LSD() {
   for(int i = 0; i < _cols; i++){
-    _upper_row[i] = 'u';
-    _lower_row[i] = 'l';
+    _char_buffer[i] = '_';
   }
+}
+
+size_t LSD::write(uint8_t value) {
+  _char_buffer[_cursor_c] = value;
+  _cursor_c = (_cursor_c + 1) % _cols;
+  return 1;
 }
 
 void LSD::render() {
   for(int i = 0; i < _cols; i++)
-    Serial.print((char) _upper_row[i]);
-
-  Serial.print("  ");
-  
-  for(int i = 0; i < _cols; i++)
-    Serial.print((char) _lower_row[i]);
+    Serial.print((char) _char_buffer[i]);
 
   Serial.print("\r");
 
@@ -39,6 +41,7 @@ void setup() {
   // put your setup code here, to run once:
   pinMode(LED_BUILTIN, OUTPUT);
   Serial.begin(9600);
+  lsd.print("hello world");
 }
 
 void loop() {
