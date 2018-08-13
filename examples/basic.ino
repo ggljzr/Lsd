@@ -9,6 +9,9 @@ https://www.arduino.cc/en/Tutorial/HelloWorld?from=Tutorial.LiquidCrystal
 */
 
 void setup() {
+  //Lsd library does not initialize
+  //Serial interface, so this must
+  //be done here
   Serial.begin(9600);
   lsd.begin(16, 2);
   lsd.print("hello world");
