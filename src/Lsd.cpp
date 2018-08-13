@@ -50,14 +50,15 @@ void Lsd::setCursor(uint8_t col, uint8_t row) {
     _cursor_r = row;
 }
 
+void Lsd::home() {
+  this->setCursor(0, 0);
+}
+
 void Lsd::clear(){
+  this->home();
   for(int i = 0; i < _rows; i++){
     for(int j = 0; j < _cols; j++){
       _char_buffer[i][j] = (uint8_t) '_';
     }
   }
-}
-
-void Lsd::home() {
-  this->setCursor(0, 0);
 }
