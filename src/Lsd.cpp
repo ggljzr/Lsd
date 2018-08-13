@@ -14,11 +14,7 @@ void Lsd::begin(uint8_t cols, uint8_t rows) {
   _cols = (cols < _max_cols) ? cols : _max_cols;
   _rows = (rows < _max_rows) ? rows : _max_rows;
 
-  for(int i = 0; i < _rows; i++){
-    for(int j = 0; j < _cols; j++){
-      _char_buffer[i][j] = (uint8_t) '_';
-    }
-  }
+  this->clear();
 }
 
 void Lsd::render() {
@@ -47,6 +43,21 @@ size_t Lsd::write(uint8_t value) {
 }
 
 void Lsd::setCursor(uint8_t col, uint8_t row) {
-  _cursor_c = col;
-  _cursor_r = row;
+  if(col < _cols)
+    _cursor_c = col;
+  
+  if(row < _rows)
+    _cursor_r = row;
+}
+
+void Lsd::clear(){
+  for(int i = 0; i < _rows; i++){
+    for(int j = 0; j < _cols; j++){
+      _char_buffer[i][j] = (uint8_t) '_';
+    }
+  }
+}
+
+void Lsd::home() {
+  this->setCursor(0, 0);
 }

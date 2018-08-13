@@ -10,6 +10,8 @@ class Lsd : public Print{
     void render();
     void begin(uint8_t cols, uint8_t rows);
     void setCursor(uint8_t col, uint8_t row);
+    void clear();
+    void home();
     virtual size_t write(uint8_t);
 
   private:
