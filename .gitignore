@@ -1,3 +1,4 @@
 .vscode
 lsd_app/target
+build
 *.exe
