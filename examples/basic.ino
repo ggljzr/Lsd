@@ -18,10 +18,6 @@ void setup() {
 }
 
 void loop() {
-  // you also need to add render()
-  // call to actually send display data
-  // trough serial interface
-  lsd.render();
   lsd.setCursor(0, 1);
   // print the number of seconds since reset:
   lsd.print(millis() / 1000);

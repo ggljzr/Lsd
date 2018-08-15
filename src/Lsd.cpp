@@ -17,7 +17,7 @@ void Lsd::begin(uint8_t cols, uint8_t rows) {
   this->clear();
 }
 
-void Lsd::render() {
+void Lsd::_render() {
   for(int i = 0; i < _rows; i++){
     for(int j = 0; j < _cols; j++){
       Serial.print((char) _char_buffer[i][j]);
@@ -39,6 +39,7 @@ size_t Lsd::write(uint8_t value) {
       _cursor_r = 0;
   }
 
+  this->_render();
   return 1;
 }
 

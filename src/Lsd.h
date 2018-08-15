@@ -7,7 +7,6 @@
 class Lsd : public Print{
   public:
     Lsd();
-    void render();
     void begin(uint8_t cols, uint8_t rows);
     void setCursor(uint8_t col, uint8_t row);
     void clear();
@@ -25,6 +24,8 @@ class Lsd : public Print{
     uint8_t _cursor_r = 0;
 
     uint8_t _char_buffer[_max_rows][_max_cols];
+
+    void _render();
 };
 
 #endif
