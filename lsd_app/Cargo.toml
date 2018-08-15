@@ -2,3 +2,10 @@
 name = "lsd_app"
 version = "0.1.0"
 authors = ["Gogo Lejzr <gogo.lejzr@gmail.com>"]
+autobins = false
+
+[[bin]]
+name = "lsd_app"
+
+[dependencies]
+piston_window = "0.70.0"
