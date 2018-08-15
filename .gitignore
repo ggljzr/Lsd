@@ -1,1 +1,3 @@
 .vscode
+lsd_app/target
+*.exe
