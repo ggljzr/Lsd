@@ -9,3 +9,5 @@ name = "lsd_app"
 
 [dependencies]
 piston_window = "0.70.0"
+conrod = "0.61.1"
+serialport = "3.0.0"
