@@ -9,6 +9,14 @@ use serialport::prelude::*;
 
 fn main() {
 
+    let mut d = lsd_app::Display::new(16, 2);
+    
+    for i in 65..(65 + 26) {
+        d.write_byte(i as u8);
+    }
+
+    d.print_disp()
+
     /*
     let mut port_name = "COM4".to_string();
     let mut baud_rate = "9600".to_string();

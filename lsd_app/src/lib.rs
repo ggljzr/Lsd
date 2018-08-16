@@ -28,4 +28,32 @@ impl Display {
             char_buffer: vec![0; (cols * rows) as usize]
         }
     }
+
+    pub fn write_byte(&mut self, val: u8) -> Result<(), std::io::Error> {        
+        let i = (self.cursor_c + (self.cursor_r * self.cols)) as usize;
+        self.char_buffer[i] = val;
+
+        self.cursor_c += 1;
+        if self.cursor_c == self.cols {
+            self.cursor_c = 0;
+            self.cursor_r += 1;
+
+            if self.cursor_r == self.rows {
+                self.cursor_r = 0;
+            }
+        }
+
+        Ok(())
+    }
+
+    pub fn print_disp(&self) {
+        println!("cols: {}, rows: {}", self.cols, self.rows);
+
+        for (i, byte) in self.char_buffer.iter().enumerate() {
+            print!("{}", *byte as char);
+            if i == self.cols as usize {
+                println!()
+            }
+        }
+    }
 }
