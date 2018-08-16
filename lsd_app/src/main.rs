@@ -11,11 +11,13 @@ fn main() {
 
     let mut d = lsd_app::Display::new(16, 2);
     
+    d.set_cursor(0, 1);
+
     for i in 65..(65 + 26) {
         d.write_byte(i as u8);
     }
 
-    d.print_disp()
+    d.print_disp();
 
     /*
     let mut port_name = "COM4".to_string();

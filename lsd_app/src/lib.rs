@@ -46,12 +46,23 @@ impl Display {
         Ok(())
     }
 
+    pub fn set_cursor(&mut self, col: u8, row: u8) -> Result<(), std::io::Error> {
+        if col < self.cols && row < self.rows {
+            self.cursor_c = col;
+            self.cursor_r = row;
+            Ok(())
+        }
+        else {
+            Err(std::io::Error::new(std::io::ErrorKind::Other, "Invalid cursor position"))
+        }
+    }
+
     pub fn print_disp(&self) {
         println!("cols: {}, rows: {}", self.cols, self.rows);
 
         for (i, byte) in self.char_buffer.iter().enumerate() {
             print!("{}", *byte as char);
-            if i == self.cols as usize {
+            if i == (self.cols - 1) as usize {
                 println!()
             }
         }
