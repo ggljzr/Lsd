@@ -1,25 +1,16 @@
 extern crate serialport;
+extern crate lsd_app;
 
 use std::io::{self, Write};
 use std::time::Duration;
 
 use serialport::prelude::*;
-#[derive(Debug)]
-enum Command {
-    INIT {cols: u8, rows: u8}, //command for display initialization
-    WRITE(u8), //writes byte on screen, increments cursor
-    SET_C{col: u8, row: u8}, //sets screen to position
-    CLEAR, //clears display
-    HOME, //sets cursor to 0 0
-}
 
-fn parse_command(data: &Vec<u8>) -> Result<Command, io::Error> {
-    println!("{:?}", data);
-    Ok(Command::INIT{cols: 16, rows: 2})
-}
 
 fn main() {
-    let mut port_name = "COM3".to_string();
+
+    /*
+    let mut port_name = "COM4".to_string();
     let mut baud_rate = "9600".to_string();
 
     let mut settings: SerialPortSettings = Default::default();
@@ -38,7 +29,7 @@ fn main() {
             loop {
                 match port.read(serial_buf.as_mut_slice()) {
                     Ok(t) => { 
-                        let command = parse_command(&serial_buf); 
+                        let command = lsd_app::parse_command(&serial_buf); 
                         println!("{:?}", command);
                         () 
                     },
@@ -56,4 +47,6 @@ fn main() {
             ::std::process::exit(1);
         },
     }
+
+    */
 }
