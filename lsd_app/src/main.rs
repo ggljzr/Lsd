@@ -4,14 +4,18 @@ use std::io::{self, Write};
 use std::time::Duration;
 
 use serialport::prelude::*;
-
+#[derive(Debug)]
 enum Command {
-    INIT,
+    INIT {cols: u8, rows: u8}, //command for display initialization
+    WRITE(u8), //writes byte on screen, increments cursor
+    SET_C{col: u8, row: u8}, //sets screen to position
+    CLEAR, //clears display
+    HOME, //sets cursor to 0 0
 }
 
 fn parse_command(data: &Vec<u8>) -> Result<Command, io::Error> {
     println!("{:?}", data);
-    Ok(Command::INIT)
+    Ok(Command::INIT{cols: 16, rows: 2})
 }
 
 fn main() {
@@ -33,7 +37,11 @@ fn main() {
             println!("Receiving data on {} at {} baud:", &port_name, &baud_rate);
             loop {
                 match port.read(serial_buf.as_mut_slice()) {
-                    Ok(t) => { parse_command(&serial_buf); () },
+                    Ok(t) => { 
+                        let command = parse_command(&serial_buf); 
+                        println!("{:?}", command);
+                        () 
+                    },
                     Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
                     Err(e) => eprintln!("{:?}", e),
                 }
