@@ -9,7 +9,7 @@ use serialport::prelude::*;
 
 fn main() {
 
-    let mut d = lsd_app::Display::new(16, 2);
+    let mut d = lsd_app::display::Display::new(16, 2);
     
     d.set_cursor(0, 1);
 
