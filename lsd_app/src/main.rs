@@ -18,6 +18,8 @@ fn main() {
     }
 
     d.print_disp();
+    d.clear();
+    d.print_disp();
 
     /*
     let mut port_name = "COM4".to_string();

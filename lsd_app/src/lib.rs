@@ -17,19 +17,21 @@ pub struct Display {
     rows: u8,
     cursor_c: u8,
     cursor_r: u8,
-    char_buffer: Vec<u8>
+    char_buffer: Vec<u8>,
 }
 
 impl Display {
     pub fn new(cols: u8, rows: u8) -> Display {
         Display {
-            cols, rows,
-            cursor_c: 0, cursor_r: 0,
-            char_buffer: vec![0; (cols * rows) as usize]
+            cols,
+            rows,
+            cursor_c: 0,
+            cursor_r: 0,
+            char_buffer: vec![0; (cols * rows) as usize],
         }
     }
 
-    pub fn write_byte(&mut self, val: u8) -> Result<(), std::io::Error> {        
+    pub fn write_byte(&mut self, val: u8) -> Result<(), std::io::Error> {
         let i = (self.cursor_c + (self.cursor_r * self.cols)) as usize;
         self.char_buffer[i] = val;
 
@@ -51,15 +53,25 @@ impl Display {
             self.cursor_c = col;
             self.cursor_r = row;
             Ok(())
-        }
-        else {
-            Err(std::io::Error::new(std::io::ErrorKind::Other, "Invalid cursor position"))
+        } else {
+            Err(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "Invalid cursor position",
+            ))
         }
     }
 
-    pub fn print_disp(&self) {
-        println!("cols: {}, rows: {}", self.cols, self.rows);
+    pub fn home(&mut self) {
+        self.cursor_c = 0;
+        self.cursor_r = 0;
+    }
 
+    pub fn clear(&mut self) {
+        self.char_buffer = vec![0; (self.cols * self.rows) as usize];
+        self.home();
+    }
+
+    pub fn print_disp(&self) {
         for (i, byte) in self.char_buffer.iter().enumerate() {
             print!("{}", *byte as char);
             if i == (self.cols - 1) as usize {
