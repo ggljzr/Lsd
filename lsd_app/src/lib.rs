@@ -12,13 +12,13 @@ pub fn parse_command(data: &Vec<u8>) -> Result<Command, std::io::Error> {
 
     match cmd_num {
         0 => {
-            let cols = data.get(1).unwrap(); // TODO: error handling
-            let rows = data.get(2).unwrap();
+            let cols = *data.get(1).unwrap(); // TODO: error handling
+            let rows = *data.get(2).unwrap();
             Ok(Command::INIT { cols, rows})
         },
         1 => {
-            let val = data.get(1).unwrap();
-            Ok(Command::WRITE(val));
+            let val = *data.get(1).unwrap();
+            Ok(Command::WRITE(val))
         }
         _ => Err(std::io::Error::new(std::io::ErrorKind::Other, "Invalid command number"))
     }
@@ -44,7 +44,7 @@ impl Display {
         }
     }
 
-    pub fn write_byte(&mut self, val: u8) -> Result<(), std::io::Error> {
+    pub fn write_byte(&mut self, val: u8) {
         let i = (self.cursor_c + (self.cursor_r * self.cols)) as usize;
         self.char_buffer[i] = val;
 
@@ -57,8 +57,6 @@ impl Display {
                 self.cursor_r = 0;
             }
         }
-
-        Ok(())
     }
 
     pub fn set_cursor(&mut self, col: u8, row: u8) -> Result<(), std::io::Error> {
