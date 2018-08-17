@@ -21,6 +21,8 @@ fn main() {
     d.clear();
     d.print_disp();
 
+    lsd_app::display_window::main();
+
     /*
     let mut port_name = "COM4".to_string();
     let mut baud_rate = "9600".to_string();

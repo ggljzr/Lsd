@@ -91,5 +91,7 @@ impl Display {
                 println!()
             }
         }
+
+        println!();
     }
 }
