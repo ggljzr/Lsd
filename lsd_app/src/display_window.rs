@@ -22,7 +22,7 @@ impl DisplayWindow {
 
     pub fn draw(&mut self) {
         let factory = self.window.factory.clone();
-        let mut glyphs = Glyphs::new("FiraSans-Regular.ttf", factory, TextureSettings::new()).unwrap();
+        let mut glyphs = Glyphs::new("assets/FiraSans-Regular.ttf", factory, TextureSettings::new()).unwrap();
 
         while let Some(e) = self.window.next() {
             self.window.draw_2d(&e, |c, g| {
