@@ -21,7 +21,8 @@ fn main() {
     d.clear();
     d.print_disp();
 
-    lsd_app::display_window::main();
+    let mut w = lsd_app::display_window::DisplayWindow::new();
+    w.draw();
 
     /*
     let mut port_name = "COM4".to_string();
