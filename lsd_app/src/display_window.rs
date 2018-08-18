@@ -16,14 +16,16 @@ impl DisplayWindow {
             .build()
             .unwrap();
 
-        window.set_lazy(true);
+        window.set_lazy(false);
         DisplayWindow{window}
     }
 
-    pub fn draw(&mut self, s: &str) -> Option<()> {
+    pub fn get_glyphs(&self) -> Glyphs {
         let factory = self.window.factory.clone();
-        let mut glyphs = Glyphs::new("assets/FiraSans-Regular.ttf", factory, TextureSettings::new()).unwrap();
+        Glyphs::new("assets/FiraSans-Regular.ttf", factory, TextureSettings::new()).unwrap()
+    }
 
+    pub fn draw(&mut self, s: &str, glyphs: &mut Glyphs) -> Option<()> {
         match self.window.next() {
             Some(e) => {
                 self.window.draw_2d(&e, |c, g| {
@@ -31,7 +33,7 @@ impl DisplayWindow {
                     clear([0.0, 0.0, 0.0, 1.0], g);
                     text::Text::new_color([0.0, 1.0, 0.0, 1.0], 32).draw(
                         s,
-                        &mut glyphs,
+                        glyphs,
                         &c.draw_state,
                         transform, g
                     );

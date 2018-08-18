@@ -17,13 +17,16 @@ fn main() {
     let mut i: u8 = 1;
 
     let mut w = lsd_app::display_window::DisplayWindow::new();
-    
+    let mut glyphs = w.get_glyphs();
+
+    let delay = std::time::Duration::from_millis(10);
+
     loop {
         d.set_cursor(0, 1);
-        d.write_byte(65 + (i % 26));
-        i += 1;
+        d.write_byte(65 + i);
+        i = (i + 1) % 26;
 
-        match w.draw(&d.to_string()) {
+        match w.draw(&d.to_string(), &mut glyphs) {
             Some(()) => {},
             None => {
                 println!("Exiting...");
@@ -31,7 +34,7 @@ fn main() {
             }
         }
 
-        std::thread::sleep_ms(200);
+        std::thread::sleep(delay);
     }
 
     /*
