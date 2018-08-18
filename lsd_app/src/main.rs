@@ -1,9 +1,6 @@
 extern crate serialport;
 extern crate lsd_app;
 
-use std::io::{self, Write};
-use std::time::Duration;
-
 use serialport::prelude::*;
 
 use lsd_app::display::Display;
