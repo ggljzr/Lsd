@@ -26,8 +26,11 @@ pub fn parse_command(data: &Vec<u8>) -> Result<Command, std::io::Error> {
     }
 }
 
+const EMPTY_CHAR: u8 = 95; // char used as empty spaces (_)
+
 #[derive(Debug)]
 pub struct Display {
+
     cols: u8,
     rows: u8,
     cursor_c: u8,
@@ -42,7 +45,7 @@ impl Display {
             rows,
             cursor_c: 0,
             cursor_r: 0,
-            char_buffer: vec![0; (cols * rows) as usize],
+            char_buffer: vec![EMPTY_CHAR; (cols * rows) as usize],
         }
     }
 
@@ -80,18 +83,24 @@ impl Display {
     }
 
     pub fn clear(&mut self) {
-        self.char_buffer = vec![0; (self.cols * self.rows) as usize];
+        self.char_buffer = vec![EMPTY_CHAR; (self.cols * self.rows) as usize];
         self.home();
     }
 
     pub fn print_disp(&self) {
+        println!("{}", self.to_string());
+    }
+
+    pub fn to_string(&self) -> String {
+        let mut res = String::new();
+
         for (i, byte) in self.char_buffer.iter().enumerate() {
-            print!("{}", *byte as char);
+            //print!("{}", *byte as char);
+            res.push(*byte as char);
             if i == (self.cols - 1) as usize {
-                println!()
+                res.push(' ');
             }
         }
-
-        println!();
+        res
     }
 }

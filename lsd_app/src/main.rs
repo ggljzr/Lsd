@@ -6,10 +6,11 @@ use std::time::Duration;
 
 use serialport::prelude::*;
 
+use lsd_app::display::Display;
 
 fn main() {
 
-    let mut d = lsd_app::display::Display::new(16, 2);
+    let mut d = Display::new(16, 2);
     
     d.set_cursor(0, 1);
 
@@ -17,12 +18,17 @@ fn main() {
         d.write_byte(i as u8);
     }
 
-    d.print_disp();
-    d.clear();
-    d.print_disp();
-
     let mut w = lsd_app::display_window::DisplayWindow::new();
-    w.draw();
+    
+    loop {
+        match w.draw(&d.to_string()) {
+            Some(()) => continue,
+            None => {
+                println!("Exiting...");
+                break;
+            }
+        }
+    }
 
     /*
     let mut port_name = "COM4".to_string();
