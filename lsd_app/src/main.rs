@@ -19,7 +19,7 @@ fn main() {
     let delay = std::time::Duration::from_millis(25);
 
     loop {
-        //d.set_cursor(0, 1);
+        d.set_cursor(0, 1);
         d.write_byte(65 + i);
         i = (i + 1) % 26;
 
@@ -30,8 +30,6 @@ fn main() {
                 break;
             }
         }
-
-        std::thread::sleep(delay);
     }
 
     /*

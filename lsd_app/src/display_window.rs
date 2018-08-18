@@ -17,6 +17,9 @@ impl DisplayWindow {
             .unwrap();
 
         window.set_lazy(false);
+        //window.set_ups(30);
+        window.set_max_fps(120);
+        
         DisplayWindow{window}
     }
 
