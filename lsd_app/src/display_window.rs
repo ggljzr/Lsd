@@ -2,6 +2,9 @@ extern crate piston_window;
 
 use self::piston_window::*;
 
+const WIDTH: u32 = 800;
+const HEIGHT: u32 = 100;
+
 pub struct DisplayWindow {
     window: PistonWindow,
 }
@@ -11,7 +14,7 @@ Based on https://github.com/PistonDevelopers/piston-examples/blob/master/src/hel
 */
 impl DisplayWindow {
     pub fn new() -> DisplayWindow {
-        let mut window: PistonWindow = WindowSettings::new("Display Window", [800, 100])
+        let mut window: PistonWindow = WindowSettings::new("Display Window", [WIDTH, HEIGHT])
             .exit_on_esc(true)
             .build()
             .unwrap();
