@@ -14,20 +14,24 @@ fn main() {
     
     d.set_cursor(0, 1);
 
-    for i in 65..(65 + 26) {
-        d.write_byte(i as u8);
-    }
+    let mut i: u8 = 1;
 
     let mut w = lsd_app::display_window::DisplayWindow::new();
     
     loop {
+        d.set_cursor(0, 1);
+        d.write_byte(65 + (i % 26));
+        i += 1;
+
         match w.draw(&d.to_string()) {
-            Some(()) => continue,
+            Some(()) => {},
             None => {
                 println!("Exiting...");
                 break;
             }
         }
+
+        std::thread::sleep_ms(200);
     }
 
     /*
