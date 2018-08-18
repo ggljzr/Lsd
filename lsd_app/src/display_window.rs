@@ -22,7 +22,7 @@ impl DisplayWindow {
 
     pub fn get_glyphs(&self) -> Glyphs {
         let factory = self.window.factory.clone();
-        Glyphs::new("assets/FiraSans-Regular.ttf", factory, TextureSettings::new()).unwrap()
+        Glyphs::new("assets/DejaVuSansMono.ttf", factory, TextureSettings::new()).unwrap()
     }
 
     pub fn draw(&mut self, s: &str, glyphs: &mut Glyphs) -> Option<()> {

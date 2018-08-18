@@ -16,10 +16,10 @@ fn main() {
     let mut w = lsd_app::display_window::DisplayWindow::new();
     let mut glyphs = w.get_glyphs();
 
-    let delay = std::time::Duration::from_millis(10);
+    let delay = std::time::Duration::from_millis(25);
 
     loop {
-        d.set_cursor(0, 1);
+        //d.set_cursor(0, 1);
         d.write_byte(65 + i);
         i = (i + 1) % 26;
 
