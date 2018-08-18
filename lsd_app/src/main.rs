@@ -1,25 +1,21 @@
 extern crate serialport;
 extern crate lsd_app;
 
-use serialport::prelude::*;
+//use serialport::prelude::*;
 
 use lsd_app::display::Display;
 
 fn main() {
 
     let mut d = Display::new(16, 2);
-    
-    d.set_cursor(0, 1);
 
     let mut i: u8 = 1;
 
     let mut w = lsd_app::display_window::DisplayWindow::new();
     let mut glyphs = w.get_glyphs();
 
-    let delay = std::time::Duration::from_millis(25);
-
     loop {
-        d.set_cursor(0, 1);
+        d.set_cursor(0, 1).unwrap();
         d.write_byte(65 + i);
         i = (i + 1) % 26;
 

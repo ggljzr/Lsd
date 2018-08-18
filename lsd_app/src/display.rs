@@ -4,7 +4,7 @@ extern crate std;
 pub enum Command {
     INIT { cols: u8, rows: u8 }, //command for display initialization
     WRITE(u8),                   //writes byte on screen, increments cursor
-    SET_C { col: u8, row: u8 },  //sets screen to position
+    SETC { col: u8, row: u8 },  //sets screen to position
     CLEAR,                       //clears display
     HOME,                        //sets cursor to 0 0
 }
