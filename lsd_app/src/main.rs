@@ -6,7 +6,7 @@ extern crate serialport;
 use lsd_app::display::Display;
 
 fn main() {
-    let mut d = Display::new(16, 2);
+    let mut d = Display::new(16, 8);
 
     let mut i: u8 = 1;
 

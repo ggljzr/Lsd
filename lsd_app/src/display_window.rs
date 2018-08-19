@@ -10,7 +10,9 @@ const WINDOW_OFFSET_X: f64 = 10.0;
 const WINDOW_OFFSET_Y: f64 = 50.0;
 const ROW_OFFSET: f64 = 40.0;
 
-const FONT_COLOR: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
+const BACKGROUND_COLOR: [f32; 4] = [0.0, 0.0, 0.2, 1.0];
+
+const FONT_COLOR: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
 const FONT_SIZE: u32 = 32;
 
 pub struct DisplayWindow {
@@ -44,7 +46,7 @@ impl DisplayWindow {
             Some(e) => {
                 let mut offset = 0.0;
                 self.window.draw_2d(&e, |c, g| {
-                    clear([0.0, 0.0, 0.0, 1.0], g);
+                    clear(BACKGROUND_COLOR, g);
                     for row in buffer {
                         let transform =
                             c.transform.trans(WINDOW_OFFSET_X, WINDOW_OFFSET_Y + offset);
