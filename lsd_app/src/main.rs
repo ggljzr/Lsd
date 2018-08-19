@@ -18,6 +18,8 @@ fn main() {
         d.write_byte(65 + i);
         i = (i + 1) % 26;
 
+        println!("{:?}", d.get_buffer());
+
         match w.draw(&d.to_string(), &mut glyphs) {
             Some(()) => {}
             None => {

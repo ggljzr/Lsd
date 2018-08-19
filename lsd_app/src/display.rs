@@ -103,4 +103,8 @@ impl Display {
         }
         res
     }
+
+    pub fn get_buffer(&self) -> &Vec<Vec<u8>> {
+        &self.char_buffer
+    }
 }
