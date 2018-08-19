@@ -1,10 +1,17 @@
-extern crate std;
 extern crate piston_window;
+extern crate std;
 
 use self::piston_window::*;
 
 const WIDTH: u32 = 800;
 const HEIGHT: u32 = 100;
+
+const WINDOW_OFFSET_X: f64 = 10.0;
+const WINDOW_OFFSET_Y: f64 = 50.0;
+const ROW_OFFSET: f64 = 40.0;
+
+const FONT_COLOR: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
+const FONT_SIZE: u32 = 32;
 
 pub struct DisplayWindow {
     window: PistonWindow,
@@ -39,15 +46,16 @@ impl DisplayWindow {
                 self.window.draw_2d(&e, |c, g| {
                     clear([0.0, 0.0, 0.0, 1.0], g);
                     for row in buffer {
-                        let transform = c.transform.trans(10.0, 50.0 + offset);
-                        text::Text::new_color([0.0, 1.0, 0.0, 1.0], 32).draw(
+                        let transform =
+                            c.transform.trans(WINDOW_OFFSET_X, WINDOW_OFFSET_Y + offset);
+                        text::Text::new_color(FONT_COLOR, FONT_SIZE).draw(
                             std::str::from_utf8(row).unwrap(),
                             glyphs,
                             &c.draw_state,
                             transform,
                             g,
                         );
-                        offset += 40.0;
+                        offset += ROW_OFFSET;
                     }
                 });
                 Some(())
