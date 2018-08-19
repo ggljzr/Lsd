@@ -1,3 +1,4 @@
+extern crate std;
 extern crate piston_window;
 
 use self::piston_window::*;
@@ -31,19 +32,23 @@ impl DisplayWindow {
         Glyphs::new("assets/DejaVuSansMono.ttf", factory, TextureSettings::new()).unwrap()
     }
 
-    pub fn draw(&mut self, s: &str, glyphs: &mut Glyphs) -> Option<()> {
+    pub fn draw(&mut self, buffer: &Vec<Vec<u8>>, glyphs: &mut Glyphs) -> Option<()> {
         match self.window.next() {
             Some(e) => {
+                let mut offset = 0.0;
                 self.window.draw_2d(&e, |c, g| {
-                    let transform = c.transform.trans(10.0, 50.0);
                     clear([0.0, 0.0, 0.0, 1.0], g);
-                    text::Text::new_color([0.0, 1.0, 0.0, 1.0], 32).draw(
-                        s,
-                        glyphs,
-                        &c.draw_state,
-                        transform,
-                        g,
-                    );
+                    for row in buffer {
+                        let transform = c.transform.trans(10.0, 50.0 + offset);
+                        text::Text::new_color([0.0, 1.0, 0.0, 1.0], 32).draw(
+                            std::str::from_utf8(row).unwrap(),
+                            glyphs,
+                            &c.draw_state,
+                            transform,
+                            g,
+                        );
+                        offset += 40.0;
+                    }
                 });
                 Some(())
             }
