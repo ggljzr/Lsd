@@ -1,12 +1,11 @@
-extern crate serialport;
 extern crate lsd_app;
+extern crate serialport;
 
 //use serialport::prelude::*;
 
 use lsd_app::display::Display;
 
 fn main() {
-
     let mut d = Display::new(16, 2);
 
     let mut i: u8 = 1;
@@ -20,7 +19,7 @@ fn main() {
         i = (i + 1) % 26;
 
         match w.draw(&d.to_string(), &mut glyphs) {
-            Some(()) => {},
+            Some(()) => {}
             None => {
                 println!("Exiting...");
                 break;

@@ -22,8 +22,8 @@ impl DisplayWindow {
         window.set_lazy(false);
         //window.set_ups(30);
         window.set_max_fps(60);
-        
-        DisplayWindow{window}
+
+        DisplayWindow { window }
     }
 
     pub fn get_glyphs(&self) -> Glyphs {
@@ -41,13 +41,13 @@ impl DisplayWindow {
                         s,
                         glyphs,
                         &c.draw_state,
-                        transform, g
+                        transform,
+                        g,
                     );
                 });
                 Some(())
-            },
-            None => None
+            }
+            None => None,
         }
-
     }
 }

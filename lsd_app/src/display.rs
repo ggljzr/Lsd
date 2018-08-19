@@ -4,7 +4,7 @@ extern crate std;
 pub enum Command {
     INIT { cols: u8, rows: u8 }, //command for display initialization
     WRITE(u8),                   //writes byte on screen, increments cursor
-    SETC { col: u8, row: u8 },  //sets screen to position
+    SETC { col: u8, row: u8 },   //sets screen to position
     CLEAR,                       //clears display
     HOME,                        //sets cursor to 0 0
 }
@@ -16,13 +16,16 @@ pub fn parse_command(data: &Vec<u8>) -> Result<Command, std::io::Error> {
         0 => {
             let cols = *data.get(1).unwrap(); // TODO: error handling
             let rows = *data.get(2).unwrap();
-            Ok(Command::INIT { cols, rows})
-        },
+            Ok(Command::INIT { cols, rows })
+        }
         1 => {
             let val = *data.get(1).unwrap();
             Ok(Command::WRITE(val))
         }
-        _ => Err(std::io::Error::new(std::io::ErrorKind::Other, "Invalid command number"))
+        _ => Err(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "Invalid command number",
+        )),
     }
 }
 
@@ -30,7 +33,6 @@ const EMPTY_CHAR: u8 = 95; // char used as empty spaces (_)
 
 #[derive(Debug)]
 pub struct Display {
-
     cols: u8,
     rows: u8,
     cursor_c: u8,
