@@ -33,27 +33,26 @@ const EMPTY_CHAR: u8 = 95; // char used as empty spaces (_)
 
 #[derive(Debug)]
 pub struct Display {
-    cols: u8,
-    rows: u8,
-    cursor_c: u8,
-    cursor_r: u8,
-    char_buffer: Vec<u8>,
+    cols: usize,
+    rows: usize,
+    cursor_c: usize,
+    cursor_r: usize,
+    char_buffer: Vec<Vec<u8>>,
 }
 
 impl Display {
-    pub fn new(cols: u8, rows: u8) -> Display {
+    pub fn new(cols: usize, rows: usize) -> Display {
         Display {
             cols,
             rows,
             cursor_c: 0,
             cursor_r: 0,
-            char_buffer: vec![EMPTY_CHAR; (cols * rows) as usize],
+            char_buffer: vec![vec![EMPTY_CHAR; cols]; rows],
         }
     }
 
     pub fn write_byte(&mut self, val: u8) {
-        let i = (self.cursor_c + (self.cursor_r * self.cols)) as usize;
-        self.char_buffer[i] = val;
+        self.char_buffer[self.cursor_r][self.cursor_c] = val;
 
         self.cursor_c += 1;
         if self.cursor_c == self.cols {
@@ -66,7 +65,7 @@ impl Display {
         }
     }
 
-    pub fn set_cursor(&mut self, col: u8, row: u8) -> Result<(), std::io::Error> {
+    pub fn set_cursor(&mut self, col: usize, row: usize) -> Result<(), std::io::Error> {
         if col < self.cols && row < self.rows {
             self.cursor_c = col;
             self.cursor_r = row;
@@ -85,7 +84,7 @@ impl Display {
     }
 
     pub fn clear(&mut self) {
-        self.char_buffer = vec![EMPTY_CHAR; (self.cols * self.rows) as usize];
+        self.char_buffer = vec![vec![EMPTY_CHAR; self.cols]; self.rows];
         self.home();
     }
 
@@ -96,12 +95,11 @@ impl Display {
     pub fn to_string(&self) -> String {
         let mut res = String::new();
 
-        for (i, byte) in self.char_buffer.iter().enumerate() {
-            //print!("{}", *byte as char);
-            res.push(*byte as char);
-            if i == (self.cols - 1) as usize {
-                res.push(' ');
+        for v in &self.char_buffer {
+            for c in v {
+                res.push(*c as char);
             }
+            res.push(' ');
         }
         res
     }
