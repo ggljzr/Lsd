@@ -25,6 +25,8 @@ class Lsd : public Print{
 
     uint8_t _cols = 16;
     uint8_t _rows = 1;
+
+    static void _end_row();
 };
 
 #endif
