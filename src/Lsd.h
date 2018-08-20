@@ -4,6 +4,12 @@
 #include <inttypes.h>
 #include "Print.h"
 
+#define CMD_INIT 0
+#define CMD_WRITE 1
+#define CMD_SETC 2
+#define CMD_CLEAR 3
+#define CMD_HOME 4
+
 class Lsd : public Print{
   public:
     Lsd();
@@ -19,13 +25,6 @@ class Lsd : public Print{
 
     uint8_t _cols = 16;
     uint8_t _rows = 1;
-
-    uint8_t _cursor_c = 0;
-    uint8_t _cursor_r = 0;
-
-    uint8_t _char_buffer[_max_rows][_max_cols];
-
-    void _render();
 };
 
 #endif

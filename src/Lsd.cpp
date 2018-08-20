@@ -13,53 +13,28 @@ Lsd::Lsd() {
 void Lsd::begin(uint8_t cols, uint8_t rows) {
   _cols = (cols < _max_cols) ? cols : _max_cols;
   _rows = (rows < _max_rows) ? rows : _max_rows;
-
-  this->clear();
 }
 
-void Lsd::_render() {
-  for(int i = 0; i < _rows; i++){
-    for(int j = 0; j < _cols; j++){
-      Serial.print((char) _char_buffer[i][j]);
-    }
-    Serial.print("  ");
-  }
-
-  Serial.print("\r");
-}
-
-size_t Lsd::write(uint8_t value) {
-  _char_buffer[_cursor_r][_cursor_c] = value;
-  _cursor_c++;
-
-  if(_cursor_c >= _cols){
-    _cursor_c = 0;
-    _cursor_r++;
-    if(_cursor_r >= _rows)
-      _cursor_r = 0;
-  }
-
-  this->_render();
+size_t Lsd::write(uint8_t val) {
+  Serial.write(CMD_WRITE);
+  Serial.write(val);
+  Serial.flush();
   return 1;
 }
 
 void Lsd::setCursor(uint8_t col, uint8_t row) {
-  if(col < _cols)
-    _cursor_c = col;
-  
-  if(row < _rows)
-    _cursor_r = row;
+  Serial.write(CMD_SETC);
+  Serial.write(col);
+  Serial.write(row);
+  Serial.flush();
 }
 
 void Lsd::home() {
-  this->setCursor(0, 0);
+  Serial.write(CMD_HOME);
+  Serial.flush();
 }
 
 void Lsd::clear(){
-  this->home();
-  for(int i = 0; i < _rows; i++){
-    for(int j = 0; j < _cols; j++){
-      _char_buffer[i][j] = (uint8_t) '_';
-    }
-  }
+  Serial.write(CMD_CLEAR);
+  Serial.flush();
 }
