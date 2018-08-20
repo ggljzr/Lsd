@@ -2,9 +2,9 @@ extern crate std;
 
 #[derive(Debug)]
 pub enum Command {
-    INIT { cols: u8, rows: u8 }, //command for display initialization
+    INIT { cols: usize, rows: usize }, //command for display initialization
     WRITE(u8),                   //writes byte on screen, increments cursor
-    SETC { col: u8, row: u8 },   //sets screen to position
+    SETC { col: usize, row: usize },   //sets screen to position
     CLEAR,                       //clears display
     HOME,                        //sets cursor to 0 0
 }
@@ -16,10 +16,21 @@ pub fn parse_command(data: &[u8]) -> Result<Command, std::io::Error> {
         cmd_num = *v as i8;
     }
 
+    let mut byte_l = 0;
+    let mut byte_h = 0;
+
+    if let Some(v) = data.get(1) {
+        byte_l = *v;
+    }
+
+    if let Some(v) = data.get(2) {
+        byte_h = *v;
+    }
+
     match cmd_num {
         0 => {
-            let cols = *data.get(1).unwrap(); // TODO: error handling
-            let rows = *data.get(2).unwrap();
+            let cols = byte_l as usize; // TODO: error handling
+            let rows = byte_h as usize;
             Ok(Command::INIT { cols, rows })
         }
         1 => {
@@ -27,8 +38,8 @@ pub fn parse_command(data: &[u8]) -> Result<Command, std::io::Error> {
             Ok(Command::WRITE(val))
         }
         2 => {
-            let col = *data.get(1).unwrap();
-            let row = *data.get(2).unwrap();
+            let col = byte_l as usize;
+            let row = byte_h as usize;
             Ok(Command::SETC { col, row})
         }
         3 => Ok(Command::CLEAR),
@@ -117,5 +128,17 @@ impl Display {
 
     pub fn get_buffer(&self) -> &Vec<Vec<u8>> {
         &self.char_buffer
+    }
+
+    pub fn exec_command(&mut self, cmd: Command) -> Result<(), std::io::Error> {
+        match cmd {
+            Command::INIT {cols, rows} => {},
+            Command::WRITE(val) => self.write_byte(val),
+            Command::SETC {col, row} => self.set_cursor(col, row)?,
+            Command::CLEAR => self.clear(),
+            Command::HOME => self.home(),
+        }
+
+        Ok(())
     }
 }

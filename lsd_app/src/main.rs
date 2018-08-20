@@ -8,12 +8,13 @@ use lsd_app::display::parse_command;
 use std::time::Duration;
 
 fn main() {
-    let mut d = Display::new(16, 8);
+    let mut d = Display::new(16, 2);
 
     let mut i: u8 = 1;
 
-    //let mut w = lsd_app::display_window::DisplayWindow::new();
-    //let mut glyphs = w.get_glyphs();
+    let mut w = lsd_app::display_window::DisplayWindow::new();
+    let mut glyphs = w.get_glyphs();
+
     /*
     loop {
         d.set_cursor(0, 1).unwrap();
@@ -49,11 +50,25 @@ fn main() {
                 match port.read(serial_buf.as_mut_slice()) {
                     Ok(t) => {
                         for chunk in serial_buf[..t].chunks(3) {
-                            println!("{:?}", parse_command(chunk).unwrap());
+                            match parse_command(chunk) {
+                                //Ok(cmd) => d.exec_command(cmd).unwrap(),
+                                Ok(cmd) => println!("{:?} ({:?})", cmd, chunk),
+                                Err(e) => println!("Invalid cmd ({:?})", chunk),
+                            }
+                            //println!("{:?}", &cmd);
                         }
+
                     },
                     Err(ref e) if e.kind() == std::io::ErrorKind::TimedOut => (),
                     Err(e) => eprintln!("{:?}", e),
+                }
+
+                match w.draw(d.get_buffer(), &mut glyphs) {
+                    Some(()) => {},
+                    None => {
+                        println!("Exiting...");
+                        break;
+                    }
                 }
             }
         },
