@@ -4,6 +4,7 @@ extern crate serialport;
 use serialport::prelude::*;
 
 use lsd_app::display::Display;
+use lsd_app::display::parse_command;
 use std::time::Duration;
 
 fn main() {
@@ -42,14 +43,13 @@ fn main() {
 
     match serialport::open_with_settings(&port_name, &settings) {
         Ok(mut port) => {
-            let mut serial_buf: Vec<u8> = vec![0; 8];
+            let mut serial_buf: Vec<u8> = vec![0; 1000];
             println!("Receiving data on {} at {} baud:", &port_name, &baud_rate);
             loop {
                 match port.read(serial_buf.as_mut_slice()) {
-                    Ok(t) => { 
-                        //let command = lsd_app::parse_command(&serial_buf); 
-                        println!("{:?}", &serial_buf);
-                        () 
+                    Ok(t) => {
+                        println!("{:?} ({})", &serial_buf[..t], t);
+                        println!("{:?}", parse_command(&serial_buf[..t]).unwrap());
                     },
                     Err(ref e) if e.kind() == std::io::ErrorKind::TimedOut => (),
                     Err(e) => eprintln!("{:?}", e),

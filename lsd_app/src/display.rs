@@ -9,8 +9,12 @@ pub enum Command {
     HOME,                        //sets cursor to 0 0
 }
 
-pub fn parse_command(data: &Vec<u8>) -> Result<Command, std::io::Error> {
-    let cmd_num = data[0];
+pub fn parse_command(data: &[u8]) -> Result<Command, std::io::Error> {
+    let mut cmd_num = -1;
+
+    if let Some(v) = data.get(0) {
+        cmd_num = *v as i8;
+    }
 
     match cmd_num {
         0 => {
@@ -22,6 +26,13 @@ pub fn parse_command(data: &Vec<u8>) -> Result<Command, std::io::Error> {
             let val = *data.get(1).unwrap();
             Ok(Command::WRITE(val))
         }
+        2 => {
+            let col = *data.get(1).unwrap();
+            let row = *data.get(2).unwrap();
+            Ok(Command::SETC { col, row})
+        }
+        3 => Ok(Command::CLEAR),
+        4 => Ok(Command::HOME),
         _ => Err(std::io::Error::new(
             std::io::ErrorKind::Other,
             "Invalid command number",
