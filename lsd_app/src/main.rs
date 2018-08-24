@@ -1,7 +1,9 @@
 extern crate lsd_app;
 extern crate serialport;
+extern crate argparse;
 
 use serialport::prelude::*;
+use argparse::{ArgumentParser, Store};
 
 use lsd_app::display::Display;
 use lsd_app::display::parse_command;
@@ -9,29 +11,22 @@ use std::time::Duration;
 
 fn main() {
     let mut d = Display::new(16, 2);
-
-    let mut i: u8 = 1;
-
     let mut w = lsd_app::display_window::DisplayWindow::new();
     let mut glyphs = w.get_glyphs();
 
-    /*
-    loop {
-        d.set_cursor(0, 1).unwrap();
-        d.write_byte(65 + i);
-        i = (i + 1) % 26;
-
-        match w.draw(d.get_buffer(), &mut glyphs) {
-            Some(()) => {}
-            None => {
-                println!("Exiting...");
-                break;
-            }
-        }
-    }*/
-
     let mut port_name = "COM4".to_string();
     let mut baud_rate = "9600".to_string();
+
+    {
+        let mut parser = ArgumentParser::new();
+        parser.set_description("LSD display application");
+        parser.refer(&mut port_name)
+        .add_argument("port", Store, "Serial port to which is Arduino connected (e. g. COM4)");
+        parser.refer(&mut baud_rate)
+        .add_argument("baud_rate", Store, "Baud rate");
+
+        parser.parse_args_or_exit();
+    }
 
     let mut settings: SerialPortSettings = Default::default();
     settings.timeout = Duration::from_millis(10);
