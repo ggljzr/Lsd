@@ -37,6 +37,10 @@ fn main() {
         ::std::process::exit(1);
     }
 
+    /*
+    based on https://gitlab.com/susurrus/serialport-rs/blob/master/examples/receive_data.rs
+    */
+
     match serialport::open_with_settings(&port_name, &settings) {
         Ok(mut port) => {
             let mut serial_buf: Vec<u8> = vec![10; 1000];
