@@ -30,7 +30,7 @@ fn main() {
         }
     }*/
 
-    let mut port_name = "COM3".to_string();
+    let mut port_name = "COM4".to_string();
     let mut baud_rate = "9600".to_string();
 
     let mut settings: SerialPortSettings = Default::default();
@@ -49,10 +49,14 @@ fn main() {
             loop {
                 match port.read(serial_buf.as_mut_slice()) {
                     Ok(t) => {
+                        if t % 3 != 0 {
+                            continue;
+                        }
+
                         for chunk in serial_buf[..t].chunks(3) {
                             match parse_command(chunk) {
-                                //Ok(cmd) => d.exec_command(cmd).unwrap(),
-                                Ok(cmd) => println!("{:?} ({:?})", cmd, chunk),
+                                Ok(cmd) => d.exec_command(cmd).unwrap(),
+                                //Ok(cmd) => println!("{:?} ({:?})", cmd, chunk),
                                 Err(e) => println!("Invalid cmd ({:?})", chunk),
                             }
                             //println!("{:?}", &cmd);
