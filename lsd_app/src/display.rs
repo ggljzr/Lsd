@@ -11,6 +11,8 @@ const CMD_WRITE: u8 = 1;
 const CMD_SETC: u8 = 2;
 const CMD_CLEAR: u8 = 3;
 const CMD_HOME: u8 = 4;
+const CMD_CURSOR: u8 = 5;
+const CMD_NOCURSOR: u8 = 6;
 const CMD_INVALID: u8 = 255;
 
 #[derive(Debug)]
@@ -32,7 +34,7 @@ impl Display {
             cursor_c: 0,
             cursor_r: 0,
             blink: false,
-            cursor: true,
+            cursor: false,
             char_buffer: vec![vec![EMPTY_CHAR; cols]; rows],
         }
     }
@@ -136,6 +138,14 @@ impl Display {
             }
             CMD_HOME => {
                 self.home();
+                Ok(())
+            }
+            CMD_CURSOR => {
+                self.cursor = true;
+                Ok(())
+            }
+            CMD_NOCURSOR => {
+                self.cursor = false;
                 Ok(())
             }
             _ => Err(std::io::Error::new(

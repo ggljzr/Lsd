@@ -9,6 +9,8 @@
 #define CMD_SETC 2
 #define CMD_CLEAR 3
 #define CMD_HOME 4
+#define CMD_CURSOR 5
+#define CMD_NOCURSOR 6
 
 class Lsd : public Print{
   public:
@@ -17,6 +19,8 @@ class Lsd : public Print{
     void setCursor(uint8_t col, uint8_t row);
     void clear();
     void home();
+    void noCursor();
+    void cursor();
     virtual size_t write(uint8_t byte);
 
   private:

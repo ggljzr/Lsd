@@ -41,9 +41,23 @@ void Lsd::home() {
   Lsd::_end_row();
 }
 
-void Lsd::clear(){
+void Lsd::clear() {
   Serial.write(CMD_CLEAR);
   Serial.write(0); // padding
+  Serial.write(0);
+  Lsd::_end_row();
+}
+
+void Lsd::cursor() {
+  Serial.write(CMD_CURSOR);
+  Serial.write(0);
+  Serial.write(0);
+  Lsd::_end_row();
+}
+
+void Lsd::noCursor() {
+  Serial.write(CMD_NOCURSOR);
+  Serial.write(0);
   Serial.write(0);
   Lsd::_end_row();
 }
