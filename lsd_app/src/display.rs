@@ -3,6 +3,7 @@ extern crate std;
 pub const COMMAND_SIZE: usize = 3; //size of command in bytes
 
 const EMPTY_CHAR: u8 = 95; // char used as empty spaces (_)
+const BLOCK_CHAR: u8 = 35;
 
 //commands
 const CMD_INIT: u8 = 0;
@@ -31,7 +32,7 @@ impl Display {
             cursor_c: 0,
             cursor_r: 0,
             blink: false,
-            cursor: false,
+            cursor: true,
             char_buffer: vec![vec![EMPTY_CHAR; cols]; rows],
         }
     }
@@ -89,8 +90,13 @@ impl Display {
         res
     }
 
-    pub fn get_buffer(&self) -> &Vec<Vec<u8>> {
-        &self.char_buffer
+    pub fn get_draw_data(&self) -> Vec<Vec<u8>> {
+        let mut data = self.char_buffer.clone();
+        if self.cursor == true {
+            data[self.cursor_r][self.cursor_c] = BLOCK_CHAR;
+        }
+        
+        data
     }
 
     pub fn exec_command(&mut self, cmd: &[u8]) -> Result<(), std::io::Error> {

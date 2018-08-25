@@ -42,12 +42,12 @@ impl DisplayWindow {
         DisplayWindow { window, glyphs}
     }
 
-    fn _draw_rows(rows: &Vec<Vec<u8>>, glyphs: &mut Glyphs, c: Context, g: &mut G2d) {
+    fn _draw_rows(rows: Vec<Vec<u8>>, glyphs: &mut Glyphs, c: Context, g: &mut G2d) {
         let mut offset = 0.0;
         for row in rows {
             let transform = c.transform.trans(WINDOW_OFFSET_X, WINDOW_OFFSET_Y + offset);
             text::Text::new_color(FONT_COLOR, FONT_SIZE).draw(
-                std::str::from_utf8(row).unwrap(),
+                std::str::from_utf8(&row).unwrap(),
                 glyphs,
                 &c.draw_state,
                 transform,
@@ -63,7 +63,7 @@ impl DisplayWindow {
                 let gl = &mut self.glyphs; //borrow glyphs for closure
                 self.window.draw_2d(&e, |c, g| {
                     clear(BACKGROUND_COLOR, g);
-                    DisplayWindow::_draw_rows(display.get_buffer(), gl, c, g);    
+                    DisplayWindow::_draw_rows(display.get_draw_data(), gl, c, g);    
                 });
                 Some(())
             }
