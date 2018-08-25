@@ -43,24 +43,27 @@ impl DisplayWindow {
         Glyphs::new("assets/DejaVuSansMono.ttf", factory, TextureSettings::new()).unwrap()
     }
 
+    fn _draw_rows(rows: &Vec<Vec<u8>>, glyphs: &mut Glyphs, c: Context, g: &mut G2d) {
+        let mut offset = 0.0;
+        for row in rows {
+            let transform = c.transform.trans(WINDOW_OFFSET_X, WINDOW_OFFSET_Y + offset);
+            text::Text::new_color(FONT_COLOR, FONT_SIZE).draw(
+                std::str::from_utf8(row).unwrap(),
+                glyphs,
+                &c.draw_state,
+                transform,
+                g,
+            );
+            offset += ROW_OFFSET;
+        }
+    }
+
     pub fn draw(&mut self, display: &Display, glyphs: &mut Glyphs) -> Option<()> {
         match self.window.next() {
             Some(e) => {
-                let mut offset = 0.0;
                 self.window.draw_2d(&e, |c, g| {
                     clear(BACKGROUND_COLOR, g);
-                    for row in display.get_buffer() {
-                        let transform =
-                            c.transform.trans(WINDOW_OFFSET_X, WINDOW_OFFSET_Y + offset);
-                        text::Text::new_color(FONT_COLOR, FONT_SIZE).draw(
-                            std::str::from_utf8(row).unwrap(),
-                            glyphs,
-                            &c.draw_state,
-                            transform,
-                            g,
-                        );
-                        offset += ROW_OFFSET;
-                    }
+                    DisplayWindow::_draw_rows(display.get_buffer(), glyphs, c, g);    
                 });
                 Some(())
             }
