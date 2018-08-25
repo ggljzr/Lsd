@@ -1,5 +1,7 @@
 # LSD (Work in progess)
 
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Lsd app screenshot")
+
 Library for simulating 16x2 LCD display via serial port. Its purpose is to replace [LiquidCrystal](https://www.arduino.cc/en/Reference/LiquidCrystal) library in testing/debugging cases where you don't have any suitable LCD available.
 
 ## Usage
