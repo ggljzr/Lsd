@@ -39,7 +39,7 @@ impl Display {
         }
     }
 
-    pub fn write_byte(&mut self, val: u8) {
+    fn _write_byte(&mut self, val: u8) {
         self.char_buffer[self.cursor_r][self.cursor_c] = val;
 
         self.cursor_c += 1;
@@ -53,7 +53,7 @@ impl Display {
         }
     }
 
-    pub fn set_cursor(&mut self, col: usize, row: usize) -> Result<(), std::io::Error> {
+    fn _set_cursor(&mut self, col: usize, row: usize) -> Result<(), std::io::Error> {
         if col < self.cols && row < self.rows {
             self.cursor_c = col;
             self.cursor_r = row;
@@ -66,14 +66,14 @@ impl Display {
         }
     }
 
-    pub fn home(&mut self) {
+    fn _home(&mut self) {
         self.cursor_c = 0;
         self.cursor_r = 0;
     }
 
-    pub fn clear(&mut self) {
+    fn _clear(&mut self) {
         self.char_buffer = vec![vec![EMPTY_CHAR; self.cols]; self.rows];
-        self.home();
+        self._home();
     }
 
     pub fn print_disp(&self) {
@@ -125,19 +125,19 @@ impl Display {
                 Ok(())
             }
             CMD_WRITE => {
-                self.write_byte(byte_l);
+                self._write_byte(byte_l);
                 Ok(())
             }
             CMD_SETC => {
-                self.set_cursor(byte_l as usize, byte_h as usize)?;
+                self._set_cursor(byte_l as usize, byte_h as usize)?;
                 Ok(())
             }
             CMD_CLEAR => {
-                self.clear();
+                self._clear();
                 Ok(())
             }
             CMD_HOME => {
-                self.home();
+                self._home();
                 Ok(())
             }
             CMD_CURSOR => {
