@@ -28,6 +28,14 @@ After Arduino code is uploaded, you can start PC application:
 > lsd_app COM3 9600
 ```
 
+You can download precompiled binary for Windows in release section, or you can compile it with [Cargo](https://doc.rust-lang.org/cargo/):
+
+```
+> cd lsd_app
+# compiles and runs the binary
+> cargo run COM3 9600
+```
+
 ## Supported functions
 
 * `void begin(uint8_t cols, uint8_t rows)` -- (you can call it but it does nothing for now)
