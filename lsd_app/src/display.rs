@@ -18,6 +18,8 @@ pub struct Display {
     rows: usize,
     cursor_c: usize,
     cursor_r: usize,
+    blink: bool,
+    cursor: bool,
     char_buffer: Vec<Vec<u8>>,
 }
 
@@ -28,6 +30,8 @@ impl Display {
             rows,
             cursor_c: 0,
             cursor_r: 0,
+            blink: false,
+            cursor: false,
             char_buffer: vec![vec![EMPTY_CHAR; cols]; rows],
         }
     }
