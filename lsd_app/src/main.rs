@@ -45,21 +45,15 @@ fn main() {
 
     match serialport::open_with_settings(&port_name, &settings) {
         Ok(mut port) => {
-            let mut serial_buf: Vec<u8> = vec![0; 99];
+            let mut serial_buf: Vec<u8> = vec![0; 3];
             println!("Receiving data on {} at {} baud:", &port_name, &baud_rate);
             loop {
-                match port.read(serial_buf.as_mut_slice()) {
-                    Ok(t) => {
-                        if t % 3 != 0 {
-                            continue;
-                        }
-
-                        for chunk in serial_buf[..t].chunks(3) {
-                            match parse_command(chunk) {
-                                Ok(cmd) => d.exec_command(cmd).unwrap(),
-                                //Ok(cmd) => println!("{:?} ({:?})", cmd, chunk),
-                                Err(_e) => println!("Invalid cmd ({:?})", chunk),
-                            }
+                match port.read_exact(serial_buf.as_mut_slice()) {
+                    Ok(_) => {
+                        match parse_command(&serial_buf) {
+                            Ok(cmd) => d.exec_command(cmd).unwrap(),
+                            //Ok(cmd) => println!("{:?} ({:?})", cmd, chunk),
+                            Err(_e) => println!("Invalid cmd ({:?})", &serial_buf),
                         }
 
                     },
