@@ -1,5 +1,7 @@
 extern crate std;
 
+pub const COMMAND_SIZE: usize = 3; //size of command in bytes
+
 #[derive(Debug)]
 pub enum Command {
     INIT { cols: usize, rows: usize }, //command for display initialization

@@ -5,8 +5,7 @@ extern crate argparse;
 use serialport::prelude::*;
 use argparse::{ArgumentParser, Store};
 
-use lsd_app::display::Display;
-use lsd_app::display::parse_command;
+use lsd_app::display::{Display, parse_command, COMMAND_SIZE};
 use lsd_app::display_window::DisplayWindow;
 
 use std::time::Duration;
@@ -45,7 +44,7 @@ fn main() {
 
     match serialport::open_with_settings(&port_name, &settings) {
         Ok(mut port) => {
-            let mut serial_buf: Vec<u8> = vec![0; 3];
+            let mut serial_buf: Vec<u8> = vec![0; COMMAND_SIZE];
             println!("Receiving data on {} at {} baud:", &port_name, &baud_rate);
             loop {
                 match port.read_exact(serial_buf.as_mut_slice()) {
