@@ -3,6 +3,8 @@ extern crate std;
 
 use self::piston_window::*;
 
+use display::Display;
+
 const WIDTH: u32 = 800;
 const HEIGHT: u32 = 100;
 
@@ -41,13 +43,13 @@ impl DisplayWindow {
         Glyphs::new("assets/DejaVuSansMono.ttf", factory, TextureSettings::new()).unwrap()
     }
 
-    pub fn draw(&mut self, buffer: &Vec<Vec<u8>>, glyphs: &mut Glyphs) -> Option<()> {
+    pub fn draw(&mut self, display: &Display, glyphs: &mut Glyphs) -> Option<()> {
         match self.window.next() {
             Some(e) => {
                 let mut offset = 0.0;
                 self.window.draw_2d(&e, |c, g| {
                     clear(BACKGROUND_COLOR, g);
-                    for row in buffer {
+                    for row in display.get_buffer() {
                         let transform =
                             c.transform.trans(WINDOW_OFFSET_X, WINDOW_OFFSET_Y + offset);
                         text::Text::new_color(FONT_COLOR, FONT_SIZE).draw(

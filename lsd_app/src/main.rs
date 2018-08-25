@@ -60,7 +60,7 @@ fn main() {
                     Err(e) => eprintln!("{:?}", e),
                 }
 
-                match w.draw(d.get_buffer(), &mut glyphs) {
+                match w.draw(&d, &mut glyphs) {
                     Some(()) => {},
                     None => {
                         println!("Exiting...");
