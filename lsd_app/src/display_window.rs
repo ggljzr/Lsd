@@ -19,6 +19,7 @@ const FONT_SIZE: u32 = 32;
 
 pub struct DisplayWindow {
     window: PistonWindow,
+    glyphs: Glyphs
 }
 
 /*
@@ -35,12 +36,10 @@ impl DisplayWindow {
         //window.set_ups(30);
         window.set_max_fps(60);
 
-        DisplayWindow { window }
-    }
+        let factory = window.factory.clone();
+        let glyphs = Glyphs::new("assets/DejaVuSansMono.ttf", factory, TextureSettings::new()).unwrap();
 
-    pub fn get_glyphs(&self) -> Glyphs {
-        let factory = self.window.factory.clone();
-        Glyphs::new("assets/DejaVuSansMono.ttf", factory, TextureSettings::new()).unwrap()
+        DisplayWindow { window, glyphs}
     }
 
     fn _draw_rows(rows: &Vec<Vec<u8>>, glyphs: &mut Glyphs, c: Context, g: &mut G2d) {
@@ -58,12 +57,13 @@ impl DisplayWindow {
         }
     }
 
-    pub fn draw(&mut self, display: &Display, glyphs: &mut Glyphs) -> Option<()> {
+    pub fn draw(&mut self, display: &Display) -> Option<()> {
         match self.window.next() {
             Some(e) => {
+                let gl = &mut self.glyphs; //borrow glyphs for closure
                 self.window.draw_2d(&e, |c, g| {
                     clear(BACKGROUND_COLOR, g);
-                    DisplayWindow::_draw_rows(display.get_buffer(), glyphs, c, g);    
+                    DisplayWindow::_draw_rows(display.get_buffer(), gl, c, g);    
                 });
                 Some(())
             }

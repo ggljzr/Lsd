@@ -13,7 +13,7 @@ use std::time::Duration;
 fn main() {
     let mut d = Display::new(16, 2);
     let mut w = DisplayWindow::new();
-    let mut glyphs = w.get_glyphs();
+    //let mut glyphs = w.get_glyphs();
 
     let mut port_name = "COM4".to_string();
     let mut baud_rate = "9600".to_string();
@@ -60,7 +60,7 @@ fn main() {
                     Err(e) => eprintln!("{:?}", e),
                 }
 
-                match w.draw(&d, &mut glyphs) {
+                match w.draw(&d) {
                     Some(()) => {},
                     None => {
                         println!("Exiting...");
