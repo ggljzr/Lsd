@@ -5,7 +5,7 @@ extern crate argparse;
 use serialport::prelude::*;
 use argparse::{ArgumentParser, Store};
 
-use lsd_app::display::{Display, parse_command, COMMAND_SIZE};
+use lsd_app::display::{Display, COMMAND_SIZE};
 use lsd_app::display_window::DisplayWindow;
 
 use std::time::Duration;
@@ -49,8 +49,8 @@ fn main() {
             loop {
                 match port.read_exact(serial_buf.as_mut_slice()) {
                     Ok(_) => {
-                        match parse_command(&serial_buf) {
-                            Ok(cmd) => d.exec_command(cmd).unwrap(),
+                        match d.exec_command(&serial_buf) {
+                            Ok(()) => {},
                             //Ok(cmd) => println!("{:?} ({:?})", cmd, chunk),
                             Err(_e) => println!("Invalid cmd ({:?})", &serial_buf),
                         }

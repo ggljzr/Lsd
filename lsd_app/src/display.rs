@@ -2,58 +2,15 @@ extern crate std;
 
 pub const COMMAND_SIZE: usize = 3; //size of command in bytes
 
-#[derive(Debug)]
-pub enum Command {
-    INIT { cols: usize, rows: usize }, //command for display initialization
-    WRITE(u8),                   //writes byte on screen, increments cursor
-    SETC { col: usize, row: usize },   //sets screen to position
-    CLEAR,                       //clears display
-    HOME,                        //sets cursor to 0 0
-}
-
-pub fn parse_command(data: &[u8]) -> Result<Command, std::io::Error> {
-    let mut cmd_num = -1;
-
-    if let Some(v) = data.get(0) {
-        cmd_num = *v as i8;
-    }
-
-    let mut byte_l = 0;
-    let mut byte_h = 0;
-
-    if let Some(v) = data.get(1) {
-        byte_l = *v;
-    }
-
-    if let Some(v) = data.get(2) {
-        byte_h = *v;
-    }
-
-    match cmd_num {
-        0 => {
-            let cols = byte_l as usize; // TODO: error handling
-            let rows = byte_h as usize;
-            Ok(Command::INIT { cols, rows })
-        }
-        1 => {
-            let val = *data.get(1).unwrap();
-            Ok(Command::WRITE(val))
-        }
-        2 => {
-            let col = byte_l as usize;
-            let row = byte_h as usize;
-            Ok(Command::SETC { col, row})
-        }
-        3 => Ok(Command::CLEAR),
-        4 => Ok(Command::HOME),
-        _ => Err(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            "Invalid command number",
-        )),
-    }
-}
-
 const EMPTY_CHAR: u8 = 95; // char used as empty spaces (_)
+
+//commands
+const CMD_INIT: u8 = 0;
+const CMD_WRITE: u8 = 1;
+const CMD_SETC: u8 = 2;
+const CMD_CLEAR: u8 = 3;
+const CMD_HOME: u8 = 4;
+const CMD_INVALID: u8 = 255;
 
 #[derive(Debug)]
 pub struct Display {
@@ -132,15 +89,49 @@ impl Display {
         &self.char_buffer
     }
 
-    pub fn exec_command(&mut self, cmd: Command) -> Result<(), std::io::Error> {
-        match cmd {
-            Command::INIT {cols, rows} => {},
-            Command::WRITE(val) => self.write_byte(val),
-            Command::SETC {col, row} => self.set_cursor(col, row)?,
-            Command::CLEAR => self.clear(),
-            Command::HOME => self.home(),
+    pub fn exec_command(&mut self, cmd: &[u8]) -> Result<(), std::io::Error> {
+        let mut cmd_num = CMD_INVALID;
+
+        if let Some(v) = cmd.get(0) {
+            cmd_num = *v;
         }
 
-        Ok(())
+        let mut byte_l = 0;
+        let mut byte_h = 0;
+
+        if let Some(v) = cmd.get(1) {
+            byte_l = *v;
+        }
+
+        if let Some(v) = cmd.get(2) {
+            byte_h = *v;
+        }
+
+        match cmd_num {
+            CMD_INIT => {
+                //TODO: init command
+                Ok(())
+            }
+            CMD_WRITE => {
+                self.write_byte(byte_l);
+                Ok(())
+            }
+            CMD_SETC => {
+                self.set_cursor(byte_l as usize, byte_h as usize)?;
+                Ok(())
+            }
+            CMD_CLEAR => {
+                self.clear();
+                Ok(())
+            }
+            CMD_HOME => {
+                self.home();
+                Ok(())
+            }
+            _ => Err(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "Invalid command number",
+            )),
+        }
     }
 }
