@@ -7,11 +7,13 @@ use argparse::{ArgumentParser, Store};
 
 use lsd_app::display::Display;
 use lsd_app::display::parse_command;
+use lsd_app::display_window::DisplayWindow;
+
 use std::time::Duration;
 
 fn main() {
     let mut d = Display::new(16, 2);
-    let mut w = lsd_app::display_window::DisplayWindow::new();
+    let mut w = DisplayWindow::new();
     let mut glyphs = w.get_glyphs();
 
     let mut port_name = "COM4".to_string();
@@ -56,9 +58,8 @@ fn main() {
                             match parse_command(chunk) {
                                 Ok(cmd) => d.exec_command(cmd).unwrap(),
                                 //Ok(cmd) => println!("{:?} ({:?})", cmd, chunk),
-                                Err(e) => println!("Invalid cmd ({:?})", chunk),
+                                Err(_e) => println!("Invalid cmd ({:?})", chunk),
                             }
-                            //println!("{:?}", &cmd);
                         }
 
                     },
