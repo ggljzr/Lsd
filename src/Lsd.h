@@ -17,7 +17,7 @@ class Lsd : public Print{
     void setCursor(uint8_t col, uint8_t row);
     void clear();
     void home();
-    virtual size_t write(uint8_t);
+    virtual size_t write(uint8_t byte);
 
   private:
     static const uint8_t _max_rows = 4;

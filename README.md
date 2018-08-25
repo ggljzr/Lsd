@@ -34,5 +34,5 @@ After Arduino code is uploaded, you can start PC application:
 * `void setCursor(uint8_t col, uint8_t row)`
 * `void clear()`
 * `void home()`
-* `size_t write(uint8_t)` -- virtual method for Print class
+* `size_t write(uint8_t byte)` -- virtual method for Print class
 * methods inherited from Arduino Print class (e. g. `print()`)
