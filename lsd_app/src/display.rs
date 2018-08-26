@@ -184,11 +184,58 @@ impl Display {
 
 #[cfg(test)]
 mod tests {
+    extern crate std;
     #[test]
     /*
-    Fills display with capital letters, then makes two
-    shifts to the right, checks last character on display
+    Simple write test.
     */
+    fn test_write_byte() {
+        let mut td = super::Display::new(16, 2);
+        td._write_byte('A' as u8);
+        td._write_byte('B' as u8);
+        td._write_byte('C' as u8);
+
+        assert_eq!(td.char_buffer[0][0], 'A' as u8);
+        assert_eq!(td.char_buffer[0][1], 'B' as u8);
+        assert_eq!(td.char_buffer[0][2], 'C' as u8);
+    }
+
+    #[test]
+    /*
+    Tests if character is written to correct position
+    after valid _set_cursor() call.
+     */
+    fn test_set_cursor() {
+        let mut td = super::Display::new(16, 2);
+
+        //test valid cursor position
+        let res = td._set_cursor(5, 1);
+        assert_eq!((), res.unwrap());
+        
+        td._write_byte('A' as u8);
+        assert_eq!(td.char_buffer[1][5], 'A' as u8);
+
+    }
+
+    /*
+    Tests if appropriate error is returned
+    if cursor is set to invalid position
+    (i. e. that exceeding display's rows or cols)
+    */
+    #[test]
+    fn test_set_cursor_invalid() {
+        let mut td = super::Display::new(16, 2);
+        match td._set_cursor(17, 5) {
+            Ok(_) => assert!(false, "Expected error!"),
+            Err(e) => assert_eq!(e.kind(), std::io::ErrorKind::Other)
+        }
+    }
+
+    /*
+    Fills display with capital letters, then makes two
+    shifts to the right, checks last character on display.
+    */
+    #[test]
     fn test_scroll_right() {
         let mut td = super::Display::new(16, 2);
 
