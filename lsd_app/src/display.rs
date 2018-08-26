@@ -13,6 +13,7 @@ const CMD_CLEAR: u8 = 3;
 const CMD_HOME: u8 = 4;
 const CMD_CURSOR: u8 = 5;
 const CMD_NOCURSOR: u8 = 6;
+const CMD_SCROLL_RIGHT: u8 = 7; 
 const CMD_INVALID: u8 = 255;
 
 #[derive(Debug)]
@@ -165,6 +166,10 @@ impl Display {
                 self.cursor = false;
                 Ok(())
             }
+            CMD_SCROLL_RIGHT => {
+                self._scroll_right();
+                Ok(())
+            }
             _ => Err(std::io::Error::new(
                 std::io::ErrorKind::Other,
                 "Invalid command number",
@@ -183,7 +188,7 @@ mod tests {
     fn test_scroll_right() {
         let mut td = super::Display::new(16, 2);
 
-        for i in (0..32) {
+        for i in 0..32 {
             td._write_byte(65 + (i % 26) );
         }    
     

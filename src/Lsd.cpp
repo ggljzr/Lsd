@@ -61,3 +61,10 @@ void Lsd::noCursor() {
   Serial.write(0);
   Lsd::_end_row();
 }
+
+void Lsd::scrollDisplayRight() {
+  Serial.write(CMD_SCROLL_RIGHT);
+  Serial.write(0);
+  Serial.write(0);
+  Lsd::_end_row();
+}
