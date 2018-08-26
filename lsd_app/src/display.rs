@@ -52,6 +52,21 @@ impl Display {
         };
     }
 
+    fn _move_cursor_left(&mut self) {
+        if self.cursor_c > 0 {
+            self.cursor_c -= 1;
+        }
+        else {
+            self.cursor_c = self.cols - 1;
+            if self.cursor_r > 0 {
+                self.cursor_r -= 1;
+            }
+            else {
+                self.cursor_r = self.rows - 1;
+            }
+        }
+    }
+
     fn _write_byte(&mut self, val: u8) {
         self.char_buffer[self.cursor_r][self.cursor_c] = val;
         self._move_cursor_right();
@@ -229,6 +244,32 @@ mod tests {
             Ok(_) => assert!(false, "Expected error!"),
             Err(e) => assert_eq!(e.kind(), std::io::ErrorKind::Other)
         }
+    }
+
+    /*
+    Tests for correct cursor overflowing
+    in move_cursor methods.
+    */
+    #[test]
+    fn test_move_cursor_right() {
+        let mut td = super::Display::new(16, 2);
+        //set cursor to last position
+        let _res = td._set_cursor(15, 1);
+        td._move_cursor_right();
+        //cursor now should be at home position
+        assert_eq!(0, td.cursor_c);
+        assert_eq!(0, td.cursor_r);
+    }
+
+    #[test]
+    fn test_move_cursor_left() {
+        let mut td = super::Display::new(16, 2);
+        //set cursor to home position
+        let _res = td._set_cursor(0, 0);
+        td._move_cursor_left();
+        //cursor now should be at the last position
+        assert_eq!(15, td.cursor_c);
+        assert_eq!(1, td.cursor_r);
     }
 
     /*
