@@ -40,9 +40,7 @@ impl Display {
         }
     }
 
-    fn _write_byte(&mut self, val: u8) {
-        self.char_buffer[self.cursor_r][self.cursor_c] = val;
-
+    fn _move_cursor_right(&mut self) {
         self.cursor_c += 1;
         if self.cursor_c == self.cols {
             self.cursor_c = 0;
@@ -51,7 +49,12 @@ impl Display {
             if self.cursor_r == self.rows {
                 self.cursor_r = 0;
             }
-        }
+        };
+    }
+
+    fn _write_byte(&mut self, val: u8) {
+        self.char_buffer[self.cursor_r][self.cursor_c] = val;
+        self._move_cursor_right();
     }
 
     fn _set_cursor(&mut self, col: usize, row: usize) -> Result<(), std::io::Error> {
@@ -92,6 +95,7 @@ impl Display {
         }
 
         self.char_buffer[self.rows - 1].push(c);
+        self._move_cursor_right();
     }
 
     pub fn print_disp(&self) {
