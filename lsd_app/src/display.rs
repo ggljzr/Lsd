@@ -76,6 +76,23 @@ impl Display {
         self._home();
     }
 
+    fn _scroll_right(&mut self) {
+        let mut c = EMPTY_CHAR;
+
+        if let Some(v) = self.char_buffer[self.rows - 1].pop() {
+            c = v;
+        }
+
+        for row in &mut self.char_buffer {
+            row.insert(0, c);
+            if let Some(v) = row.pop() {
+                c = v;
+            }
+        }
+
+        self.char_buffer[self.rows - 1].push(c);
+    }
+
     pub fn print_disp(&self) {
         println!("{}", self.to_string());
     }
@@ -153,5 +170,29 @@ impl Display {
                 "Invalid command number",
             )),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    /*
+    Fills display with capital letters, then makes two
+    shifts to the right, checks last character on display
+    */
+    fn test_scroll_right() {
+        let mut td = super::Display::new(16, 2);
+
+        for i in (0..32) {
+            td._write_byte(65 + (i % 26) );
+        }    
+    
+        let last_char = td.char_buffer[td.rows - 1][td.cols - 1];
+        assert_eq!(last_char, 'F' as u8);
+        td._scroll_right();
+        td._scroll_right();
+        let last_char = td.char_buffer[td.rows - 1][td.cols - 1];
+        assert_eq!(last_char, 'D' as u8);
+
     }
 }
