@@ -96,11 +96,7 @@ impl Display {
     }
 
     fn _scroll_right(&mut self) {
-        let mut c = EMPTY_CHAR;
-
-        if let Some(v) = self.char_buffer[self.rows - 1].pop() {
-            c = v;
-        }
+        let mut c = self.char_buffer[self.rows - 1][self.cols - 1];
 
         for row in &mut self.char_buffer {
             row.insert(0, c);
@@ -109,7 +105,6 @@ impl Display {
             }
         }
 
-        self.char_buffer[self.rows - 1].push(c);
         self._move_cursor_right();
     }
 
@@ -305,7 +300,6 @@ mod tests {
         td._scroll_right();
         let last_char = td.char_buffer[td.rows - 1][td.cols - 1];
         assert_eq!(last_char, 'D' as u8);
-
     }
 
     /*
