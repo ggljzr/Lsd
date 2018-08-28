@@ -13,7 +13,8 @@ const CMD_CLEAR: u8 = 3;
 const CMD_HOME: u8 = 4;
 const CMD_CURSOR: u8 = 5;
 const CMD_NOCURSOR: u8 = 6;
-const CMD_SCROLL_RIGHT: u8 = 7; 
+const CMD_SCROLL_RIGHT: u8 = 7;
+const CMD_SCROLL_LEFT: u8 = 8;
 const CMD_INVALID: u8 = 255;
 
 #[derive(Debug)]
@@ -55,13 +56,11 @@ impl Display {
     fn _move_cursor_left(&mut self) {
         if self.cursor_c > 0 {
             self.cursor_c -= 1;
-        }
-        else {
+        } else {
             self.cursor_c = self.cols - 1;
             if self.cursor_r > 0 {
                 self.cursor_r -= 1;
-            }
-            else {
+            } else {
                 self.cursor_r = self.rows - 1;
             }
         }
@@ -112,7 +111,7 @@ impl Display {
         let mut c = self.char_buffer[0][0];
 
         {
-            let rev_iter = self.char_buffer.iter_mut().rev();    
+            let rev_iter = self.char_buffer.iter_mut().rev();
 
             for mut row in rev_iter {
                 row.push(c);
@@ -144,7 +143,7 @@ impl Display {
         if self.cursor == true {
             data[self.cursor_r][self.cursor_c] = BLOCK_CHAR;
         }
-        
+
         data
     }
 
@@ -170,35 +169,39 @@ impl Display {
             CMD_INIT => {
                 //TODO: init command
                 Ok(())
-            }
+            },
             CMD_WRITE => {
                 self._write_byte(byte_l);
                 Ok(())
-            }
+            },
             CMD_SETC => {
                 self._set_cursor(byte_l as usize, byte_h as usize)?;
                 Ok(())
-            }
+            },
             CMD_CLEAR => {
                 self._clear();
                 Ok(())
-            }
+            },
             CMD_HOME => {
                 self._home();
                 Ok(())
-            }
+            },
             CMD_CURSOR => {
                 self.cursor = true;
                 Ok(())
-            }
+            },
             CMD_NOCURSOR => {
                 self.cursor = false;
                 Ok(())
-            }
+            },
             CMD_SCROLL_RIGHT => {
                 self._scroll_right();
                 Ok(())
-            }
+            },
+            CMD_SCROLL_LEFT => {
+                self._scroll_left();
+                Ok(())
+            },
             _ => Err(std::io::Error::new(
                 std::io::ErrorKind::Other,
                 "Invalid command number",
@@ -236,10 +239,9 @@ mod tests {
         //test valid cursor position
         let res = td._set_cursor(5, 1);
         assert_eq!((), res.unwrap());
-        
+
         td._write_byte('A' as u8);
         assert_eq!(td.char_buffer[1][5], 'A' as u8);
-
     }
 
     /*
@@ -252,7 +254,7 @@ mod tests {
         let mut td = super::Display::new(16, 2);
         match td._set_cursor(17, 5) {
             Ok(_) => assert!(false, "Expected error!"),
-            Err(e) => assert_eq!(e.kind(), std::io::ErrorKind::Other)
+            Err(e) => assert_eq!(e.kind(), std::io::ErrorKind::Other),
         }
     }
 
@@ -291,9 +293,9 @@ mod tests {
         let mut td = super::Display::new(16, 2);
 
         for i in 0..32 {
-            td._write_byte(65 + (i % 26) );
-        }    
-    
+            td._write_byte(65 + (i % 26));
+        }
+
         let last_char = td.char_buffer[td.rows - 1][td.cols - 1];
         assert_eq!(last_char, 'F' as u8);
         td._scroll_right();
@@ -308,7 +310,7 @@ mod tests {
     #[test]
     fn test_scroll_left() {
         let mut td = super::Display::new(16, 2);
-        
+
         td._write_byte('A' as u8);
         td._write_byte('B' as u8);
 

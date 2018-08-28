@@ -12,6 +12,7 @@
 #define CMD_CURSOR 5
 #define CMD_NOCURSOR 6
 #define CMD_SCROLL_RIGHT 7
+#define CMD_SCROLL_LEFT 8
 
 class Lsd : public Print{
   public:
@@ -23,6 +24,7 @@ class Lsd : public Print{
     void noCursor();
     void cursor();
     void scrollDisplayRight();
+    void scrollDisplayLeft();
     virtual size_t write(uint8_t byte);
 
   private:
