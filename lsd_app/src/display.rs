@@ -113,6 +113,21 @@ impl Display {
         self._move_cursor_right();
     }
 
+    fn _scroll_left(&mut self) {
+        let mut c = self.char_buffer[0][0];
+
+        {
+            let rev_iter = self.char_buffer.iter_mut().rev();    
+
+            for mut row in rev_iter {
+                row.push(c);
+                c = row.remove(0);
+            }
+        }
+
+        self._move_cursor_left();
+    }
+
     pub fn print_disp(&self) {
         println!("{}", self.to_string());
     }
@@ -291,5 +306,31 @@ mod tests {
         let last_char = td.char_buffer[td.rows - 1][td.cols - 1];
         assert_eq!(last_char, 'D' as u8);
 
+    }
+
+    /*
+    Similar to test_scroll_right() test.
+    */
+    #[test]
+    fn test_scroll_left() {
+        let mut td = super::Display::new(16, 2);
+        
+        td._write_byte('A' as u8);
+        td._write_byte('B' as u8);
+
+        let _res = td._set_cursor(0, 1);
+        td._write_byte('C' as u8);
+
+        td._scroll_left();
+
+        td.print_disp();
+
+        let a_char = td.char_buffer[td.rows - 1][td.cols - 1];
+        let b_char = td.char_buffer[0][0];
+        let c_char = td.char_buffer[0][td.cols - 1];
+
+        assert_eq!(a_char, 'A' as u8);
+        assert_eq!(b_char, 'B' as u8);
+        assert_eq!(c_char, 'C' as u8);
     }
 }
