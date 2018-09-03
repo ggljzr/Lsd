@@ -6,7 +6,9 @@ Library for simulating 16x2 LCD display via serial port. Its purpose is to repla
 
 ## Usage
 
-On Arduino replace LCD instance initialized by LiquidCrystal library with one from Lsd library. You'll also need to start serial interface for communication (baud rate 9600 should work fine):
+On Arduino replace LCD instance initialized by LiquidCrystal library with one from Lsd library. Note that this will mask all LiquidCrystal method calls with Lsd calls, so no further changes in the code should be necessary (except initializing serial interface).  
+
+You'll also need to start serial interface for communication (baud rate 9600 should work fine):
 
 ```c++
 #include <LiquidCrystal.h>
